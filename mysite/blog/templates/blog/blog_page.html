@@ -16,6 +16,20 @@ template-blogpage
         {{ page.date }}
     </p>
 
+    {% with authors=page.authors.all %}
+        {% if authors %}
+            <h3>Posted by:</h3>
+            <ul>
+                {% for author in authors %}
+                    <li>
+                        {% image author.author_image fill-40x60 style="vertical-align: middle" %}
+                        {{ author.name }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
     <div class="intro">
         {{ page.intro }}
     </div>
