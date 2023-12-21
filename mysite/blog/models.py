@@ -2,6 +2,8 @@ from django import forms
 from django.db import models
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField
@@ -25,12 +27,34 @@ class BlogIndexPage(Page):
         FieldPanel('intro')
     ]
 
+class BlogPageTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'BlogPage',
+        related_name = 'tagged_items',
+        on_delete = models.CASCADE,
+    )
+
+class BlogTagIndexPage(Page):
+
+    def get_context(self, request):
+        # Filter by tag
+        tag = request.GET.get('tag')
+        blogpages = BlogPage.objects.filter(tags__name=tag)
+
+        # Update template context
+        context = super().get_context(request)
+        context['blogpages'] = blogpages
+
+        return context
+
 class BlogPage(Page):
     date = models.DateField("Post Date")
     intro = models.CharField(max_length=250)
     body = RichTextField(blank=True)
 
     authors = ParentalManyToManyField('blog.Author', blank=True)
+
+    tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
 
     def main_image(self):
         gallery_item = self.gallery_images.first()
@@ -48,6 +72,7 @@ class BlogPage(Page):
         MultiFieldPanel([
             FieldPanel('date'),
             FieldPanel('authors', widget=forms.CheckboxSelectMultiple),
+            FieldPanel('tags'),
         ],
         heading = "Blog information"
         ),
@@ -91,3 +116,4 @@ class Author(models.Model):
     
     class Meta:
         verbose_name_plural = "Authors"
+
