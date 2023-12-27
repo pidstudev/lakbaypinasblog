@@ -26,6 +26,11 @@ footer {
     border-bottom: 2px dotted;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 .page-form label {
     display: block;
     margin-top: 10px;
