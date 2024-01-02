@@ -1,0 +1,75 @@
+<!-- travelcost/templates/travelcost/travelcost.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        .result-container ul {
+            list-style-type: none; /* Remove default list-style dots */
+            padding: 0; /* Remove default padding */
+        }
+
+        .result-container ul li {
+            margin-bottom: 10px; /* Add spacing between list items */
+        }
+    </style>
+
+    <div>
+        <h4>Travel Cost Estimator</h4>
+        <p>Price/Cost is estimated and negotiable. It may increase/decrease depending on your itinerary. Please <a href="/contact-us">contact us</a> for more details.</p>
+    </div>
+
+    <div class="container mt-5">
+        <form method="post" action="{% url 'calculate_travel_cost' %}" class="mb-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="distance" class="form-label">Total Distance (in kms): Refer to <a href="https://www.google.com.ph/maps/@14.547559,121.2875859,10.62z?entry=ttu" target="_blank">Google Maps</a></label>
+                <input type="text" name="distance" id="distance" class="form-control" required>
+                <small class="text-muted">Total Distance in Kilometers - One Way</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="fuel_consumption" class="form-label">Fuel Consumption (in km/L):</label>
+                <input type="text" name="fuel_consumption" id="fuel_consumption" class="form-control" required>
+                <small class="text-muted">e.g. 7 for 7 km/L</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="fuel_price" class="form-label">Fuel Price (in pesos/L):</label>
+                <input type="text" name="fuel_price" id="fuel_price" class="form-control" required>
+                <small class="text-muted">Current Fuel Price e.g. 65</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="toll_fee" class="form-label">Toll Fee Estimate (in pesos):</label>
+                <input type="text" name="toll_fee" id="toll_fee" class="form-control" required>
+                <small class="text-muted">Estimated Toll Fee</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="vehicle_rental_cost" class="form-label">Vehicle Rental Cost (in pesos):</label>
+                <input type="text" name="vehicle_rental_cost" id="vehicle_rental_cost" class="form-control" required>
+                <small class="text-muted">e.g. 5000 for 1 Day or 10000 for 2 Days</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Estimate Cost</button>
+        </form>
+
+        {% if calculator_result %}
+            <div class="result-container">
+                <h4>Estimated Cost</h4>
+                <ul>
+                    <li>Total Distance: {{ calculator_result.total_distance|default:"N/A" }} kms</li>
+                    <li>Fuel Consumption: {{ calculator_result.fuel_consumption|default:"N/A" }} km/L</li>
+                    <li>Fuel Price: {{ calculator_result.fuel_price|default:"N/A" }} pesos/L</li>
+                    <li>Toll Fee: {{ calculator_result.toll_fee|default:"N/A" }} pesos</li>
+                    <li>Vehicle Rental Cost: {{ calculator_result.vehicle_rental_cost|default:"N/A" }} pesos</li>
+                    <li>Estimated Total Cost: {{ calculator_result.estimated_total_cost|default:"N/A"|floatformat:2 }} pesos</li>
+                </ul>
+            </div>
+
+            <div>
+                <p>Price/Cost is estimated and negotiable. It may increase/decrease depending on your itinerary. Please <a href="/contact-us">contact us</a> for more details.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

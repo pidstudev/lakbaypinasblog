@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "blog",
     "base",
     "portfolio",
+    "travelcost",
     "wagtail.contrib.settings",
     "search",
     "wagtail.contrib.forms",
@@ -167,6 +168,8 @@ WAGTAILSEARCH_BACKENDS = {
         "BACKEND": "wagtail.search.backends.database",
     }
 }
+
+GOOGLE_MAPS_API_KEY = 'AIzaSyCqrTRd1UNRkAiuHoGPmGPXw3jA-mfdhios'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
