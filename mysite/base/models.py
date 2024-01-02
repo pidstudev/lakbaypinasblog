@@ -42,8 +42,8 @@ class NavigationSettings(BaseGenericSetting):
         blank = True,
     )
 
-    mastodon_url = models.URLField(
-        verbose_name = "Mastodon URL",
+    facebook_url = models.URLField(
+        verbose_name = "Facebook URL",
         blank = True,
     )
 
@@ -52,7 +52,7 @@ class NavigationSettings(BaseGenericSetting):
             [
                 FieldPanel("twitter_url"),
                 FieldPanel("github_url"),
-                FieldPanel("mastodon_url"),
+                FieldPanel("facebook_url"),
             ],
             "Social settings",
         )

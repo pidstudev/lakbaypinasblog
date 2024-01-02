@@ -8,9 +8,9 @@ template-blogpage
 
 {% block content %}
 
-    <h1>
+    <h4>
         {{ page.title }}
-    </h1>
+    </h4>
 
     <p class="meta">
         {{ page.date }}
@@ -18,7 +18,7 @@ template-blogpage
 
     {% with authors=page.authors.all %}
         {% if authors %}
-            <h3>Posted by:</h3>
+            <h4>Posted by:</h4>
             <ul>
                 {% for author in authors %}
                     <li>
@@ -36,6 +36,8 @@ template-blogpage
 
     {{ page.body|richtext }}
 
+    <div style="clear: both;"></div>
+
     {% for item in page.gallery_images.all %}
         <div style="float: left; margin: 10px">
             {% image item.image fill-320x240 %}
@@ -43,20 +45,24 @@ template-blogpage
         </div>
     {% endfor %}
 
-    <p>
-        <a href="{{ page.get_parent.url }}">Return to blog</a>
-    </p>
+    <div style="clear: both;"></div>
 
     <!-- Render tags on BlogPage -->
     {% with tags=page.tags.all %}
         {% if tags %}
             <div class="tags">
-                <h3>Tags</h3>
+                <h4>Tags</h4>
                 {% for tag in tags %}
                     <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
                 {% endfor %}
             </div>
         {% endif %}
     {% endwith %}
+
+    <div>
+        <p>
+            <a href="{{ page.get_parent.url }}">Return to blog</a>
+        </p>
+    </div>
 
 {% endblock %}
