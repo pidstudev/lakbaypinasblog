@@ -7,62 +7,54 @@ template-blogpage
 {% endblock %}
 
 {% block content %}
+    <article class="blog-post">
+        <header>
+            <h4>{{ page.title }}</h4>
+            <p class="meta">{{ page.date }}</p>
+            
+            {% with authors=page.authors.all %}
+                {% if authors %}
+                    <h4>Posted by:</h4>
+                    <ul class="author-list">
+                        {% for author in authors %}
+                            <li>
+                                {% image author.author_image fill-40x60 style="vertical-align: middle" %}
+                                {{ author.name }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </header>
 
-    <h4>
-        {{ page.title }}
-    </h4>
-
-    <p class="meta">
-        {{ page.date }}
-    </p>
-
-    {% with authors=page.authors.all %}
-        {% if authors %}
-            <h4>Posted by:</h4>
-            <ul>
-                {% for author in authors %}
-                    <li>
-                        {% image author.author_image fill-40x60 style="vertical-align: middle" %}
-                        {{ author.name }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-
-    <div class="intro">
-        {{ page.intro }}
-    </div>
-
-    {{ page.body|richtext }}
-
-    <div style="clear: both;"></div>
-
-    {% for item in page.gallery_images.all %}
-        <div style="float: left; margin: 10px">
-            {% image item.image fill-320x240 %}
-            <p>{{ item.caption }}</p>
+        <div class="intro">
+            {{ page.intro }}
         </div>
-    {% endfor %}
 
-    <div style="clear: both;"></div>
+        <div class="body-content">
+            {{ page.body|richtext }}
+        </div>
 
-    <!-- Render tags on BlogPage -->
-    {% with tags=page.tags.all %}
-        {% if tags %}
+        {% for item in page.gallery_images.all %}
+            <div class="gallery-item">
+                {% image item.image fill-600x400 %}
+                <p>{{ item.caption }}</p>
+            </div>
+        {% endfor %}
+
+        <!-- <footer>
             <div class="tags">
                 <h4>Tags</h4>
-                {% for tag in tags %}
+                {% for tag in page.tags.all %}
                     <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button type="button">{{ tag }}</button></a>
                 {% endfor %}
+            </div> -->
+
+            <div class="return-link">
+                <p>
+                    <a href="{{ page.get_parent.url }}">Return to blog</a>
+                </p>
             </div>
-        {% endif %}
-    {% endwith %}
-
-    <div>
-        <p>
-            <a href="{{ page.get_parent.url }}">Return to blog</a>
-        </p>
-    </div>
-
+        </footer>
+    </article>
 {% endblock %}
